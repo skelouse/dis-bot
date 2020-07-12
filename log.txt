@@ -1,0 +1,9 @@
+testprint('test')test
+test
+test
+test
+test
+test`
+test
+print(1)
+skelouse#0344 - print(1)

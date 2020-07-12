@@ -4,11 +4,11 @@ import sys
 import discord
 from discord.utils import get
 from dotenv import load_dotenv
+from traceback import format_exc
 from io import StringIO
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
-
 
 
 class CustomClient(discord.Client):
@@ -35,7 +35,16 @@ class CustomClient(discord.Client):
             if botuser:
                 old_stdout = sys.stdout
                 redirected_output = sys.stdout = StringIO()
-                exec(message.content[3:-3])
+                with open('./log.txt', 'a') as f:
+                    f.write(str(message.author)+' - ')
+                    f.write(message.content[3:-3])
+                    f.write('\n')
+                try:
+                    exec(message.content[3:-3])
+                except Exception:
+                    await message.channel.send(format_exc())
+                    return
+                    
                 sys.stdout = old_stdout
 
                 response = redirected_output.getvalue()
