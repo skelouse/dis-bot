@@ -1,9 +1,560 @@
-testprint('test')test
-test
-test
-test
-test
-test`
-test
-print(1)
 skelouse#0344 - print(1)
+skelouse#0344 - print('final test')
+Nero#4025 -  print('Hello') 
+Nero#4025 - print("Hello")
+Nero#4025 - for i in range(10):
+  print('Test')
+Nero#4025 - print('Data Science, ho!')
+Sung#7434 - 2+2==5
+Nero#4025 - if 2+2==5:
+  print('False')
+  else:
+  print('Not False')
+
+skelouse#0344 - 
+import pandas as pd
+df = pd.read_csv('nhis.csv')
+height = list(df['height'])
+df.head()
+
+skelouse#0344 - import matplotlib.pyplot as plt
+a = [1, 2, 3, 4]
+plt.hist(a, bin = 2)
+plt.show()
+
+skelouse#0344 - import matplotlib.pyplot as plt
+a = [1, 2, 3, 4]
+plt.hist(a, bin = 2)
+plt.show()
+
+skelouse#0344 - 
+import matplotlib.pyplot as plt
+plt.plot([1, 2, 3], [1, 2, 3], 'go-', label='line 1', linewidth=2)
+plt.show()
+
+skelouse#0344 - print('help')
+skelouse#0344 - 
+import numpy as np
+import time
+
+# Using 1 million integers
+huge_list_of_integers = list(range(0, 100000000))
+huge_np_array_of_integers = np.array(huge_list_of_integers)
+
+def add_one(list_of_ints):
+    return [num + 1 for num in list_of_ints]
+
+
+start_time = time.perf_counter() # Time when operation starts
+add_one(huge_list_of_integers) # Adds 1 to each number in the list of integers above
+end_time = time.perf_counter() # Time when operation finishes
+total_time = (end_time - start_time) # Total time for operation
+
+
+start_time_with_np = time.perf_counter() # Time when operation starts
+huge_np_array_of_integers + 1 # Adds 1 to each number in the array of integers
+end_time_with_np = time.perf_counter() # Time when operation finishes
+total_time_with_np = (end_time_with_np - start_time_with_np) # Total time for operation
+
+print('Time it takes to add 1 to each element in a list without NumPy:', total_time)
+print('Time it takes to add 1 to each element in a list with NumPy:', total_time_with_np)
+
+percent_faster = int((((total_time - total_time_with_np)/total_time)*100))
+print('NumPy completes the operation', percent_faster, '% faster than a traditional list')
+
+skelouse#0344 - 
+"""An example library for converting temperatures."""
+
+
+def convert_f_to_c(temperature_f):
+    """Convert Fahrenheit to Celsius."""
+    return (temperature_f - 32) * (5/9)
+
+
+def convert_c_to_f(temperature_c):
+    """Convert Celsius to Fahrenheit."""
+    return (9/5) * temperature_c + 32
+
+
+
+## CREATE THE ADDITIONAL FUNCTIONS BELOW
+
+
+def convert_c_to_k(temperature_c):
+    return temperature_c + 273
+
+def convert_f_to_k(temperature_f):
+    return (5/9) * (temperature_f - 32) + 273
+
+def convert_k_to_c(temperature_k):
+    return temperature_k + 273
+
+def convert_k_to_f(temperature_k):
+    return (9/5) * (temperature_k - 273) + 32
+
+
+## LEVEL UP
+
+def convert_f_to_all(temperature_f):
+    print(convert_f_to_c(temperature_f), 'Celsius')
+    print(convert_f_to_k(temperature_f), 'Kelvin')
+
+# test.py
+# import tempererizer as tp
+# 32F should equal 0C
+#print(tp.convert_f_to_c(32))
+
+# -40F should equal -40C
+#print(tp.convert_f_to_c(-40))
+
+# 212F should equal 100C
+#print(tp.convert_f_to_c(212))
+
+# 0C should equal 32F
+#print(tp.convert_c_to_f(0))
+
+# Running explicitly for the bot,  noting that modules are simply # code organization
+
+print(convert_c_to_f(-40))
+print(convert_c_to_f(100))
+print(convert_f_to_c(32))
+print(convert_f_to_c(-40))
+print(convert_f_to_c(212))
+print(convert_c_to_f(0))
+print(convert_c_to_f(-40))
+print(convert_c_to_f(100))
+
+
+skelouse#0344 - 
+from bs4 import BeautifulSoup
+import requests
+import re
+import pandas as pd
+
+df = pd.DataFrame(columns=['star', 'title', 'price', 'img'])
+
+def define_page(num):
+    url = str("http://books.toscrape.com/catalogue/page-%s.html" % num)
+    return url 
+
+def parse_product(product):
+    numbers = ['One', 'Two', 'Three', 'Four', 'Five']
+    star = (numbers.index(product.find_all('p')[0].attrs['class'][1])+1)
+    title = product.find_all('a')[1].attrs['title']
+    price = (product.findAll('p', class_="price_color")[0].text[1:])
+    img_source = (product.find_all('img')[0].attrs['src'][2:])
+    return dict(
+        star=star,
+        title=title,
+        price=price,
+        img=img_source
+    )
+
+def parse_page(soup):
+    products = soup.find_all('article')
+    for pr in products:
+        parsed = parse_product(pr)
+        df.loc[len(df)] = parsed
+
+
+def parse_site(url):
+    # parses first page
+    html_page = requests.get(url)
+    soup = BeautifulSoup(html_page.content, 'html.parser')
+    parse_page(soup)
+
+    # parses the rest of the pages
+    for i in range(2, 51):
+        html_page = requests.get(define_page(i))
+        soup = BeautifulSoup(html_page.content, 'html.parser')
+        parse_page(soup)
+
+
+parse_site("http://books.toscrape.com/")
+print(df)
+
+skelouse#0344 - 
+import requests
+
+skelouse#0344 - 
+from bs4 import BeautifulSoup
+import requests
+import re
+import pandas as pd
+
+df = pd.DataFrame(columns=['star', 'title', 'price', 'img'])
+
+def define_page(num):
+    url = str("http://books.toscrape.com/catalogue/page-%s.html" % num)
+    return url 
+
+def parse_product(product):
+    numbers = ['One', 'Two', 'Three', 'Four', 'Five']
+    star = (numbers.index(product.find_all('p')[0].attrs['class'][1])+1)
+    title = product.find_all('a')[1].attrs['title']
+    price = (product.findAll('p', class_="price_color")[0].text[1:])
+    img_source = (product.find_all('img')[0].attrs['src'][2:])
+    return dict(
+        star=star,
+        title=title,
+        price=price,
+        img=img_source
+    )
+
+def parse_page(soup):
+    products = soup.find_all('article')
+    for pr in products:
+        parsed = parse_product(pr)
+        df.loc[len(df)] = parsed
+
+
+def parse_site(url):
+    # parses first page
+    html_page = requests.get(url)
+    soup = BeautifulSoup(html_page.content, 'html.parser')
+    parse_page(soup)
+
+    # parses the rest of the pages
+    for i in range(2, 51):
+        html_page = requests.get(define_page(i))
+        soup = BeautifulSoup(html_page.content, 'html.parser')
+        parse_page(soup)
+
+
+parse_site("http://books.toscrape.com/")
+print(df)
+
+skelouse#0344 - 
+import requests
+print(requests.get(www.google.com))
+
+skelouse#0344 - 
+import requests
+print(requests.get("www.google.com"))
+
+skelouse#0344 - 
+from bs4 import BeautifulSoup
+import requests
+import re
+import pandas as pd
+
+df = pd.DataFrame(columns=['star', 'title', 'price', 'img'])
+
+def define_page(num):
+    url = str("http://books.toscrape.com/catalogue/page-%s.html" % num)
+    return url 
+
+def parse_product(product):
+    numbers = ['One', 'Two', 'Three', 'Four', 'Five']
+    star = (numbers.index(product.find_all('p')[0].attrs['class'][1])+1)
+    title = product.find_all('a')[1].attrs['title']
+    price = (product.findAll('p', class_="price_color")[0].text[1:])
+    img_source = (product.find_all('img')[0].attrs['src'][2:])
+    return dict(
+        star=star,
+        title=title,
+        price=price,
+        img=img_source
+    )
+
+def parse_page(soup):
+    products = soup.find_all('article')
+    for pr in products:
+        parsed = parse_product(pr)
+        df.loc[len(df)] = parsed
+
+
+def parse_site(url):
+    import requests # hack for bot
+    # parses first page
+    html_page = requests.get(url)
+    soup = BeautifulSoup(html_page.content, 'html.parser')
+    parse_page(soup)
+
+    # parses the rest of the pages
+    for i in range(2, 51):
+        html_page = requests.get(define_page(i))
+        soup = BeautifulSoup(html_page.content, 'html.parser')
+        parse_page(soup)
+
+
+parse_site("http://books.toscrape.com/")
+print(df)
+
+skelouse#0344 - 
+import re
+import pandas as pd
+
+df = pd.DataFrame(columns=['star', 'title', 'price', 'img'])
+
+def define_page(num):
+    url = str("http://books.toscrape.com/catalogue/page-%s.html" % num)
+    return url 
+
+def parse_product(product):
+    numbers = ['One', 'Two', 'Three', 'Four', 'Five']
+    star = (numbers.index(product.find_all('p')[0].attrs['class'][1])+1)
+    title = product.find_all('a')[1].attrs['title']
+    price = (product.findAll('p', class_="price_color")[0].text[1:])
+    img_source = (product.find_all('img')[0].attrs['src'][2:])
+    return dict(
+        star=star,
+        title=title,
+        price=price,
+        img=img_source
+    )
+
+def parse_page(soup):
+    products = soup.find_all('article')
+    for pr in products:
+        parsed = parse_product(pr)
+        df.loc[len(df)] = parsed
+
+
+def parse_site(url):
+    import requests
+    from bs4 import BeautifulSoup
+
+    # parses first page
+    html_page = requests.get(url)
+    soup = BeautifulSoup(html_page.content, 'html.parser')
+    parse_page(soup)
+
+    # parses the rest of the pages
+    for i in range(2, 51):
+        html_page = requests.get(define_page(i))
+        soup = BeautifulSoup(html_page.content, 'html.parser')
+        parse_page(soup)
+
+
+parse_site("http://books.toscrape.com/")
+print(df)
+
+skelouse#0344 - 
+import requests
+from bs4 import BeautifulSoup
+import re
+import pandas as pd
+
+df = pd.DataFrame(columns=['star', 'title', 'price', 'img'])
+
+def define_page(num):
+    url = str("http://books.toscrape.com/catalogue/page-%s.html" % num)
+    return url 
+
+def parse_product(product):
+    numbers = ['One', 'Two', 'Three', 'Four', 'Five']
+    star = (numbers.index(product.find_all('p')[0].attrs['class'][1])+1)
+    title = product.find_all('a')[1].attrs['title']
+    price = (product.findAll('p', class_="price_color")[0].text[1:])
+    img_source = (product.find_all('img')[0].attrs['src'][2:])
+    return dict(
+        star=star,
+        title=title,
+        price=price,
+        img=img_source
+    )
+
+def parse_page(soup):
+    products = soup.find_all('article')
+    for pr in products:
+        parsed = parse_product(pr)
+        df.loc[len(df)] = parsed
+
+
+def parse_site(url):
+    # parses first page
+    html_page = requests.get(url)
+    soup = BeautifulSoup(html_page.content, 'html.parser')
+    parse_page(soup)
+
+    # parses the rest of the pages
+    for i in range(2, 51):
+        html_page = requests.get(define_page(i))
+        soup = BeautifulSoup(html_page.content, 'html.parser')
+        parse_page(soup)
+
+
+parse_site("http://books.toscrape.com/")
+print(df)
+
+skelouse#0344 - 
+import requests
+from bs4 import BeautifulSoup
+import re
+import pandas as pd
+
+df = pd.DataFrame(columns=['star', 'title', 'price', 'img'])
+
+def define_page(num):
+    url = str("http://books.toscrape.com/catalogue/page-%s.html" % num)
+    return url 
+
+def parse_product(product):
+    numbers = ['One', 'Two', 'Three', 'Four', 'Five']
+    star = (numbers.index(product.find_all('p')[0].attrs['class'][1])+1)
+    title = product.find_all('a')[1].attrs['title']
+    price = (product.findAll('p', class_="price_color")[0].text[1:])
+    img_source = (product.find_all('img')[0].attrs['src'][2:])
+    return dict(
+        star=star,
+        title=title,
+        price=price,
+        img=img_source
+    )
+
+def parse_page(soup):
+    products = soup.find_all('article')
+    for pr in products:
+        parsed = parse_product(pr)
+        df.loc[len(df)] = parsed
+
+
+def parse_site(url):
+    # parses first page
+    html_page = requests.get(url)
+    soup = BeautifulSoup(html_page.content, 'html.parser')
+    parse_page(soup)
+
+    # parses the rest of the pages
+    for i in range(2, 51):
+        html_page = requests.get(define_page(i))
+        soup = BeautifulSoup(html_page.content, 'html.parser')
+        parse_page(soup)
+
+
+parse_site("http://books.toscrape.com/")
+print(df)
+
+skelouse#0344 - 
+import json
+import pandas as pd
+import matplotlib.pyplot as plt
+with open('disease_data.json', 'r') as f:
+    data = json.load(f)
+
+df = pd.DataFrame(data['data'])
+df.columns = [i['name'] for i in data['meta']['view']['columns']]
+
+query = "Current asthma prevalence among adults aged >= 18 years"
+new_df = df[df['Question'] == query]
+
+
+states = {}
+for state in new_df['LocationDesc'].unique():
+    states[state] = (new_df[new_df['LocationDesc']
+                        == state]['DataValue'].astype('float64').median())
+
+states = dict(sorted(states.items(), key=lambda x: x[1]))
+
+f, ax = plt.subplots(figsize=(20, 20))
+plt.barh(range(len(states)), list(states.values()), align='center')
+plt.yticks(range(len(states)), list(states.keys()))
+plt.show()
+
+skelouse#0344 - 
+import requests
+import geocoder
+import json
+import time
+import datetime
+me = geocoder.ip('me').latlng
+cred = {'lat': me[0], 'lon': me[1]}
+r = requests.get("http://api.open-notify.org/iss-pass.json", params=cred)
+data = json.loads(r.content.decode())
+
+def stamp(time_in_sec):
+    return datetime.datetime.fromtimestamp(time_in_sec).strftime("%h-%d %I:%M %p")
+
+print("requested at - ", stamp(data['request']['datetime']))
+for num, iss_pass in enumerate(data['response']):
+    duration = iss_pass['duration']
+    risetime = iss_pass['risetime']
+    print("pass #%s  -- "%str(num+1), stamp(risetime), "for", duration, 'seconds')
+
+skelouse#0344 - 
+# Billion laughs DOS attack....
+# let's see if I kill my bot T_T
+
+a = ('lol', 'lol', 'lol', 'lol', 'lol', 'lol', 'lol', 'lol', 'lol', 'lol')
+b = (a, a, a, a, a, a, a, a, a, a)
+c = (b, b, b, b, b, b, b, b, b, b)
+d = (c, c, c, c, c, c, c, c, c, c)
+e = (d, d, d, d, d, d, d, d, d, d)
+f = (e, e, e, e, e, e, e, e, e, e)
+g = (f, f, f, f, f, f, f, f, f, f)
+h = (g, g, g, g, g, g, g, g, g, g)
+i = (h, h, h, h, h, h, h, h, h, h)
+print(i)
+
+skelouse#0344 - 
+# billion laughs attack
+a = ('lol', 'lol', 'lol', 'lol', 'lol', 'lol', 'lol', 'lol', 'lol', 'lol')
+b = (a, a, a, a, a, a, a, a, a, a)
+c = (b, b, b, b, b, b, b, b, b, b)
+d = (c, c, c, c, c, c, c, c, c, c)
+e = (d, d, d, d, d, d, d, d, d, d)
+f = (e, e, e, e, e, e, e, e, e, e)
+g = (f, f, f, f, f, f, f, f, f, f)
+h = (g, g, g, g, g, g, g, g, g, g)
+i = (h, h, h, h, h, h, h, h, h, h)
+print(i)
+
+skelouse#0344 - 
+print("I have returned, my master fixed me!")
+
+skelouse#0344 - 
+l = [1, 2, 3]
+l[1:1] = 'abc'
+print(l)
+
+skelouse#0344 - 
+class Test():
+    def __iadd__(self, *args):
+        print(args)
+
+a = Test()
+a += 10
+
+skelouse#0344 - 
+import itertools
+print(itertools.combinations(['apple', 'orange', 'pear']))
+
+skelouse#0344 - 
+from itertools import combinations
+fruits = ['apple', 'orange', 'pear', 'banana', 'cherry', 'blueberry']
+
+list(combinations(fruits, 3))
+
+skelouse#0344 - 
+from itertools import combinations
+fruits = ['apple', 'orange', 'pear', 'banana', 'cherry', 'blueberry']
+
+print(list(combinations(fruits, 3)))
+
+skelouse#0344 - 
+from itertools import combinations
+fruits = ['apple', 'orange', 'pear', 'banana', 'cherry', 'blueberry']
+
+print(list(combinations(fruits, 3)))
+
+skelouse#0344 - 
+class Test():
+    def __str__(self):
+        return 'apple'
+t = Test()
+print(t)
+
+skelouse#0344 - 
+print("Hello, world!")
+
+skelouse#0344 - python
+for i in range(5):
+  print("Hello, world!")
+
+skelouse#0344 - for i in range(5):
+  print('hello world!')
+skelouse#0344 - print('hello')
+skelouse#0344 - skelouse#0344 - skelouse#0344 - print("hello")
+skelouse#0344 - for i in range(5):
+  print('hello, world')

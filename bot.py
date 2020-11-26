@@ -27,7 +27,12 @@ class CustomClient(discord.Client):
         if message.content == '/help':
             await message.channel.send("'''(code here)'''  <-  Replace the ' with `")
 
-        if message.content.startswith("```") and message.content.endswith("```"):
+        elif message.content == '/log':
+            with open("./log.txt") as f:
+                res = f.read()
+            await message.channel.send(res)
+
+        elif message.content.startswith("```") and message.content.endswith("```"):
             botuser = False
             for i in message.author.roles:
                 if i.name == "Bot User":
@@ -37,14 +42,18 @@ class CustomClient(discord.Client):
                 redirected_output = sys.stdout = StringIO()
                 with open('./log.txt', 'a') as f:
                     f.write(str(message.author)+' - ')
-                    f.write(message.content[3:-3])
+                    content = message.content[3:-3]
+                    if content.startswith('python'):
+                        content = content[6:].strip()
+                    f.write(content)
                     f.write('\n')
                 try:
-                    exec(message.content[3:-3])
+                    exec(content)
+
                 except Exception:
                     await message.channel.send(format_exc())
                     return
-                    
+
                 sys.stdout = old_stdout
 
                 response = redirected_output.getvalue()
